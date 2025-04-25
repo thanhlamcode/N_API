@@ -3,16 +3,24 @@
 // src/Entity/User.php
 namespace App\Entity;
 
+use ApiPlatform\Metadata\Post;
+use App\Controller\RegisterController;
+use App\DTO\RegisterInput;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Metadata\ApiResource;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
-use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'users')]  // Đổi tên bảng thành 'users'
 #[ApiResource(
+    operations: [
+        new Post(
+            uriTemplate: '/user/register',
+            controller: RegisterController::class,
+        )
+    ]
 )]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
