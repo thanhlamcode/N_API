@@ -5,8 +5,19 @@ api_platform:
         stateless: true
         cache_headers:
             vary: ['Content-Type', 'Authorization', 'Origin']
+        extra_properties:
+            standard_put: true
+            rfc_7807_compliant_errors: true
+
     swagger:
         api_keys:
             bearer:
                 name: Authorization
                 type: header
+    formats:
+        jsonld: [ 'application/ld+json' ]
+        json: [ 'application/json' ]
+        multipart: [ 'multipart/form-data' ]
+
+#    event_listeners_backward_compatibility_layer: false
+#    keep_legacy_inflector: false
