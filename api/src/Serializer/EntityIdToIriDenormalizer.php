@@ -35,9 +35,10 @@ final class EntityIdToIriDenormalizer implements DenormalizerInterface
             return $this->normalizer->denormalize($data, $type, $format, $context);
         }
 
-        foreach ($data as $property => $value) {
+        foreach ($data as $property => $value) { // lặp qua từng field trong data
             if (is_numeric($value)) {
                 $types = $this->propertyInfoExtractor->getTypes($type, $property);
+                // trong $type (ví dụ Product::class), field $property (category) là loại gì?
 
                 if ($types !== null) {
                     foreach ($types as $typeInfo) {

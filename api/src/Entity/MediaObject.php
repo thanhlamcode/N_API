@@ -63,10 +63,22 @@ class MediaObject
 
     #[ApiProperty(writable: false)]
     #[ORM\Column(nullable: true)]
+    #[Groups(['media_object:read'])]
     public ?string $filePath = null;
 
     public function getId(): ?int
     {
         return $this->id;
     }
+
+    public function getContentUrl(): ?string
+    {
+        return $this->contentUrl;
+    }
+
+    public function getFile(): File
+    {
+        return $this->file;
+    }
+
 }
