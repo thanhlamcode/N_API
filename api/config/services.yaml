@@ -22,5 +22,15 @@ services:
     App\State\MediaObjectProcessor:
         tags: [ 'api_platform.state_processor' ]
 
+    App\Serializer\EntityIdToIriDenormalizer:
+        arguments:
+            $iriConverter: '@api_platform.iri_converter'
+            $normalizer: '@api_platform.serializer.normalizer.item'
+            $propertyInfoExtractor: '@property_info'
+            $entityManager: '@doctrine.orm.entity_manager'
+        tags:
+            - { name: 'serializer.normalizer' }
+
+
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
