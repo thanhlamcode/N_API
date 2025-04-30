@@ -3,8 +3,11 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Put;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -13,7 +16,10 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity]
 #[ApiResource]
 #[GetCollection(security: "is_granted('ROLE_USER')")]
+#[Get]
 #[Post]
+#[Put]
+#[Patch]
 class Category
 {
     /** The ID of the category. */
