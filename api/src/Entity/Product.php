@@ -10,6 +10,7 @@ use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Attribute\Groups;
 
 /**
  * A product entity.
@@ -55,6 +56,22 @@ class Product
     /** The update date of the product. */
     #[ORM\Column(type: 'datetime_immutable')]
     public \DateTimeImmutable $updatedAt;
+
+    /** The media object (image) of the product. */
+    #[ORM\OneToOne(targetEntity: MediaObject::class, cascade: ['persist', 'remove'])]
+    #[ORM\JoinColumn(nullable: true)]
+    private ?MediaObject $media = null;
+
+    public function getMedia(): ?MediaObject
+    {
+        return $this->media;
+    }
+
+    public function setMedia(?MediaObject $media): self
+    {
+        $this->media = $media;
+        return $this;
+    }
 
     public function __construct()
     {
