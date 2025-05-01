@@ -5,7 +5,7 @@ namespace App\Entity;
 
 use ApiPlatform\Metadata\Post;
 use App\Controller\RegisterController;
-use App\DTO\RegisterInput;
+use App\DTO\ResetPasswordRequest;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Metadata\ApiResource;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -19,6 +19,13 @@ use Symfony\Component\Validator\Constraints as Assert;
         new Post(
             uriTemplate: '/user/register',
             controller: RegisterController::class,
+        ),
+        new Post(
+            uriTemplate: '/user/reset-password',
+            status: 202,
+            input: ResetPasswordRequest::class,
+            output: false,
+            messenger: 'input'
         )
     ]
 )]
