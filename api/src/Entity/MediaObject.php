@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
@@ -43,7 +44,8 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
             ),
             deserialize: false, // thêm dòng này để nhảy sang proccessor
             processor: MediaObjectProcessor::class
-        )
+        ),
+        new Delete()
     ],
     outputFormats: ['jsonld' => ['application/ld+json']],
     normalizationContext: ['groups' => ['media_object:read']]

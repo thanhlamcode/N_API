@@ -9,14 +9,27 @@ namespace App\Entity;
 use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Put;
+use App\State\MediaObjectDeleteProcessor;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Serializer\Attribute\Groups;
 
 /**
  * A product entity.
  */
 #[ORM\Entity]
-#[ApiResource]
+#[ApiResource(
+    operations: [
+        new GetCollection(),
+        new Get(),
+        new Post(),
+        new Put(),
+        new Delete(processor:  MediaObjectDeleteProcessor::class),
+    ]
+)]
 #[ApiFilter(SearchFilter::class, properties: [
     'name' => 'partial',        // Tìm gần đúng tên
     'description' => 'partial', // Tìm gần đúng mô tả
@@ -58,7 +71,7 @@ class Product
     public \DateTimeImmutable $updatedAt;
 
     /** The media object (image) of the product. */
-    #[ORM\ManyToOne(targetEntity: MediaObject::class, cascade: ['persist', 'remove'])]
+    #[ORM\ManyToOne(targetEntity: MediaObject::class)]
     #[ORM\JoinColumn(nullable: true)]
     private ?MediaObject $media = null;
 
