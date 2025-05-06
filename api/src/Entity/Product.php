@@ -58,7 +58,7 @@ class Product
     public \DateTimeImmutable $updatedAt;
 
     /** The media object (image) of the product. */
-    #[ORM\OneToOne(targetEntity: MediaObject::class, cascade: ['persist', 'remove'])]
+    #[ORM\ManyToOne(targetEntity: MediaObject::class, cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: true)]
     private ?MediaObject $media = null;
 
