@@ -1,0 +1,1831 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Hello API Platform",
+    "description": "",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "/",
+      "description": ""
+    }
+  ],
+  "paths": {
+    "/api/books": {
+      "get": {
+        "operationId": "api_books_get_collection",
+        "tags": [
+          "Book"
+        ],
+        "responses": {
+          "200": {
+            "description": "Book collection",
+            "content": {
+              "application/ld+json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "member": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Book.jsonld"
+                      }
+                    },
+                    "totalItems": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "view": {
+                      "type": "object",
+                      "properties": {
+                        "@id": {
+                          "type": "string",
+                          "format": "iri-reference"
+                        },
+                        "@type": {
+                          "type": "string"
+                        },
+                        "first": {
+                          "type": "string",
+                          "format": "iri-reference"
+                        },
+                        "last": {
+                          "type": "string",
+                          "format": "iri-reference"
+                        },
+                        "previous": {
+                          "type": "string",
+                          "format": "iri-reference"
+                        },
+                        "next": {
+                          "type": "string",
+                          "format": "iri-reference"
+                        }
+                      },
+                      "example": {
+                        "@id": "string",
+                        "type": "string",
+                        "first": "string",
+                        "last": "string",
+                        "previous": "string",
+                        "next": "string"
+                      }
+                    },
+                    "search": {
+                      "type": "object",
+                      "properties": {
+                        "@type": {
+                          "type": "string"
+                        },
+                        "template": {
+                          "type": "string"
+                        },
+                        "variableRepresentation": {
+                          "type": "string"
+                        },
+                        "mapping": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "@type": {
+                                "type": "string"
+                              },
+                              "variable": {
+                                "type": "string"
+                              },
+                              "property": {
+                                "type": [
+                                  "string",
+                                  "null"
+                                ]
+                              },
+                              "required": {
+                                "type": "boolean"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "required": [
+                    "member"
+                  ]
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Book"
+                  }
+                }
+              },
+              "multipart/form-data": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Book"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "summary": "Retrieves the collection of Book resources.",
+        "description": "Retrieves the collection of Book resources.",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "description": "The collection page number",
+            "required": false,
+            "deprecated": false,
+            "allowEmptyValue": true,
+            "schema": {
+              "type": "integer",
+              "default": 1
+            },
+            "style": "form",
+            "explode": false,
+            "allowReserved": false
+          }
+        ],
+        "deprecated": false
+      },
+      "post": {
+        "operationId": "api_books_post",
+        "tags": [
+          "Book"
+        ],
+        "responses": {
+          "201": {
+            "description": "Book resource created",
+            "content": {
+              "application/ld+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Book.jsonld"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Book"
+                }
+              },
+              "multipart/form-data": {
+                "schema": {
+                  "$ref": "#/components/schemas/Book"
+                }
+              }
+            },
+            "links": {}
+          },
+          "400": {
+            "description": "Invalid input",
+            "content": {
+              "application/ld+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error.jsonld"
+                }
+              },
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "links": {}
+          },
+          "422": {
+            "description": "An error occurred",
+            "content": {
+              "application/ld+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConstraintViolation.jsonld-jsonld"
+                }
+              },
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConstraintViolation-json"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConstraintViolation-json"
+                }
+              }
+            },
+            "links": {}
+          }
+        },
+        "summary": "Creates a Book resource.",
+        "description": "Creates a Book resource.",
+        "parameters": [],
+        "requestBody": {
+          "description": "The new Book resource",
+          "content": {
+            "application/ld+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Book.jsonld"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Book"
+              }
+            },
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Book"
+              }
+            }
+          },
+          "required": true
+        },
+        "deprecated": false
+      }
+    },
+    "/api/books/{id}": {
+      "get": {
+        "operationId": "api_books_id_get",
+        "tags": [
+          "Book"
+        ],
+        "responses": {
+          "200": {
+            "description": "Book resource",
+            "content": {
+              "application/ld+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Book.jsonld"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Book"
+                }
+              },
+              "multipart/form-data": {
+                "schema": {
+                  "$ref": "#/components/schemas/Book"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/ld+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error.jsonld"
+                }
+              },
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "links": {}
+          }
+        },
+        "summary": "Retrieves a Book resource.",
+        "description": "Retrieves a Book resource.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Book identifier",
+            "required": true,
+            "deprecated": false,
+            "allowEmptyValue": false,
+            "schema": {
+              "type": "string"
+            },
+            "style": "simple",
+            "explode": false,
+            "allowReserved": false
+          }
+        ],
+        "deprecated": false
+      },
+      "delete": {
+        "operationId": "api_books_id_delete",
+        "tags": [
+          "Book"
+        ],
+        "responses": {
+          "204": {
+            "description": "Book resource deleted"
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/ld+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error.jsonld"
+                }
+              },
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "links": {}
+          }
+        },
+        "summary": "Removes the Book resource.",
+        "description": "Removes the Book resource.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Book identifier",
+            "required": true,
+            "deprecated": false,
+            "allowEmptyValue": false,
+            "schema": {
+              "type": "string"
+            },
+            "style": "simple",
+            "explode": false,
+            "allowReserved": false
+          }
+        ],
+        "deprecated": false
+      },
+      "patch": {
+        "operationId": "api_books_id_patch",
+        "tags": [
+          "Book"
+        ],
+        "responses": {
+          "200": {
+            "description": "Book resource updated",
+            "content": {
+              "application/ld+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Book.jsonld"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Book"
+                }
+              },
+              "multipart/form-data": {
+                "schema": {
+                  "$ref": "#/components/schemas/Book"
+                }
+              }
+            },
+            "links": {}
+          },
+          "400": {
+            "description": "Invalid input",
+            "content": {
+              "application/ld+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error.jsonld"
+                }
+              },
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "links": {}
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/ld+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error.jsonld"
+                }
+              },
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "links": {}
+          },
+          "422": {
+            "description": "An error occurred",
+            "content": {
+              "application/ld+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConstraintViolation.jsonld-jsonld"
+                }
+              },
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConstraintViolation-json"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConstraintViolation-json"
+                }
+              }
+            },
+            "links": {}
+          }
+        },
+        "summary": "Updates the Book resource.",
+        "description": "Updates the Book resource.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Book identifier",
+            "required": true,
+            "deprecated": false,
+            "allowEmptyValue": false,
+            "schema": {
+              "type": "string"
+            },
+            "style": "simple",
+            "explode": false,
+            "allowReserved": false
+          }
+        ],
+        "requestBody": {
+          "description": "The updated Book resource",
+          "content": {
+            "application/merge-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Book"
+              }
+            }
+          },
+          "required": true
+        },
+        "deprecated": false
+      }
+    },
+    "/api/media_objects": {
+      "get": {
+        "operationId": "api_media_objects_get_collection",
+        "tags": [
+          "MediaObject"
+        ],
+        "responses": {
+          "200": {
+            "description": "MediaObject collection",
+            "content": {
+              "application/ld+json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "member": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/MediaObject.jsonld-media_object.read"
+                      }
+                    },
+                    "totalItems": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "view": {
+                      "type": "object",
+                      "properties": {
+                        "@id": {
+                          "type": "string",
+                          "format": "iri-reference"
+                        },
+                        "@type": {
+                          "type": "string"
+                        },
+                        "first": {
+                          "type": "string",
+                          "format": "iri-reference"
+                        },
+                        "last": {
+                          "type": "string",
+                          "format": "iri-reference"
+                        },
+                        "previous": {
+                          "type": "string",
+                          "format": "iri-reference"
+                        },
+                        "next": {
+                          "type": "string",
+                          "format": "iri-reference"
+                        }
+                      },
+                      "example": {
+                        "@id": "string",
+                        "type": "string",
+                        "first": "string",
+                        "last": "string",
+                        "previous": "string",
+                        "next": "string"
+                      }
+                    },
+                    "search": {
+                      "type": "object",
+                      "properties": {
+                        "@type": {
+                          "type": "string"
+                        },
+                        "template": {
+                          "type": "string"
+                        },
+                        "variableRepresentation": {
+                          "type": "string"
+                        },
+                        "mapping": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "@type": {
+                                "type": "string"
+                              },
+                              "variable": {
+                                "type": "string"
+                              },
+                              "property": {
+                                "type": [
+                                  "string",
+                                  "null"
+                                ]
+                              },
+                              "required": {
+                                "type": "boolean"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "required": [
+                    "member"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "summary": "Retrieves the collection of MediaObject resources.",
+        "description": "Retrieves the collection of MediaObject resources.",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "description": "The collection page number",
+            "required": false,
+            "deprecated": false,
+            "allowEmptyValue": true,
+            "schema": {
+              "type": "integer",
+              "default": 1
+            },
+            "style": "form",
+            "explode": false,
+            "allowReserved": false
+          }
+        ],
+        "deprecated": false
+      },
+      "post": {
+        "operationId": "api_media_objects_post",
+        "tags": [
+          "MediaObject"
+        ],
+        "responses": {
+          "201": {
+            "description": "MediaObject resource created",
+            "content": {
+              "application/ld+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MediaObject.jsonld-media_object.read"
+                }
+              }
+            },
+            "links": {}
+          },
+          "400": {
+            "description": "Invalid input",
+            "content": {
+              "application/ld+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error.jsonld"
+                }
+              },
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "links": {}
+          },
+          "422": {
+            "description": "An error occurred",
+            "content": {
+              "application/ld+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConstraintViolation.jsonld-jsonld"
+                }
+              },
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConstraintViolation-json"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConstraintViolation-json"
+                }
+              }
+            },
+            "links": {}
+          }
+        },
+        "summary": "Creates a MediaObject resource.",
+        "description": "Creates a MediaObject resource.",
+        "parameters": [],
+        "requestBody": {
+          "description": "The new MediaObject resource",
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              }
+            }
+          },
+          "required": false
+        },
+        "deprecated": false
+      }
+    },
+    "/api/media_objects/{id}": {
+      "get": {
+        "operationId": "api_media_objects_id_get",
+        "tags": [
+          "MediaObject"
+        ],
+        "responses": {
+          "200": {
+            "description": "MediaObject resource",
+            "content": {
+              "application/ld+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MediaObject.jsonld-media_object.read"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/ld+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error.jsonld"
+                }
+              },
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "links": {}
+          }
+        },
+        "summary": "Retrieves a MediaObject resource.",
+        "description": "Retrieves a MediaObject resource.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "MediaObject identifier",
+            "required": true,
+            "deprecated": false,
+            "allowEmptyValue": false,
+            "schema": {
+              "type": "string"
+            },
+            "style": "simple",
+            "explode": false,
+            "allowReserved": false
+          }
+        ],
+        "deprecated": false
+      }
+    },
+    "/api/reviews": {
+      "get": {
+        "operationId": "api_reviews_get_collection",
+        "tags": [
+          "Review"
+        ],
+        "responses": {
+          "200": {
+            "description": "Review collection",
+            "content": {
+              "application/ld+json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "member": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Review.jsonld"
+                      }
+                    },
+                    "totalItems": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "view": {
+                      "type": "object",
+                      "properties": {
+                        "@id": {
+                          "type": "string",
+                          "format": "iri-reference"
+                        },
+                        "@type": {
+                          "type": "string"
+                        },
+                        "first": {
+                          "type": "string",
+                          "format": "iri-reference"
+                        },
+                        "last": {
+                          "type": "string",
+                          "format": "iri-reference"
+                        },
+                        "previous": {
+                          "type": "string",
+                          "format": "iri-reference"
+                        },
+                        "next": {
+                          "type": "string",
+                          "format": "iri-reference"
+                        }
+                      },
+                      "example": {
+                        "@id": "string",
+                        "type": "string",
+                        "first": "string",
+                        "last": "string",
+                        "previous": "string",
+                        "next": "string"
+                      }
+                    },
+                    "search": {
+                      "type": "object",
+                      "properties": {
+                        "@type": {
+                          "type": "string"
+                        },
+                        "template": {
+                          "type": "string"
+                        },
+                        "variableRepresentation": {
+                          "type": "string"
+                        },
+                        "mapping": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "@type": {
+                                "type": "string"
+                              },
+                              "variable": {
+                                "type": "string"
+                              },
+                              "property": {
+                                "type": [
+                                  "string",
+                                  "null"
+                                ]
+                              },
+                              "required": {
+                                "type": "boolean"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "required": [
+                    "member"
+                  ]
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Review"
+                  }
+                }
+              },
+              "multipart/form-data": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Review"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "summary": "Retrieves the collection of Review resources.",
+        "description": "Retrieves the collection of Review resources.",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "description": "The collection page number",
+            "required": false,
+            "deprecated": false,
+            "allowEmptyValue": true,
+            "schema": {
+              "type": "integer",
+              "default": 1
+            },
+            "style": "form",
+            "explode": false,
+            "allowReserved": false
+          }
+        ],
+        "deprecated": false
+      },
+      "post": {
+        "operationId": "api_reviews_post",
+        "tags": [
+          "Review"
+        ],
+        "responses": {
+          "201": {
+            "description": "Review resource created",
+            "content": {
+              "application/ld+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Review.jsonld"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Review"
+                }
+              },
+              "multipart/form-data": {
+                "schema": {
+                  "$ref": "#/components/schemas/Review"
+                }
+              }
+            },
+            "links": {}
+          },
+          "400": {
+            "description": "Invalid input",
+            "content": {
+              "application/ld+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error.jsonld"
+                }
+              },
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "links": {}
+          },
+          "422": {
+            "description": "An error occurred",
+            "content": {
+              "application/ld+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConstraintViolation.jsonld-jsonld"
+                }
+              },
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConstraintViolation-json"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConstraintViolation-json"
+                }
+              }
+            },
+            "links": {}
+          }
+        },
+        "summary": "Creates a Review resource.",
+        "description": "Creates a Review resource.",
+        "parameters": [],
+        "requestBody": {
+          "description": "The new Review resource",
+          "content": {
+            "application/ld+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Review.jsonld"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Review"
+              }
+            },
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Review"
+              }
+            }
+          },
+          "required": true
+        },
+        "deprecated": false
+      }
+    },
+    "/api/reviews/{id}": {
+      "get": {
+        "operationId": "api_reviews_id_get",
+        "tags": [
+          "Review"
+        ],
+        "responses": {
+          "200": {
+            "description": "Review resource",
+            "content": {
+              "application/ld+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Review.jsonld"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Review"
+                }
+              },
+              "multipart/form-data": {
+                "schema": {
+                  "$ref": "#/components/schemas/Review"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/ld+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error.jsonld"
+                }
+              },
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "links": {}
+          }
+        },
+        "summary": "Retrieves a Review resource.",
+        "description": "Retrieves a Review resource.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Review identifier",
+            "required": true,
+            "deprecated": false,
+            "allowEmptyValue": false,
+            "schema": {
+              "type": "string"
+            },
+            "style": "simple",
+            "explode": false,
+            "allowReserved": false
+          }
+        ],
+        "deprecated": false
+      },
+      "delete": {
+        "operationId": "api_reviews_id_delete",
+        "tags": [
+          "Review"
+        ],
+        "responses": {
+          "204": {
+            "description": "Review resource deleted"
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/ld+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error.jsonld"
+                }
+              },
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "links": {}
+          }
+        },
+        "summary": "Removes the Review resource.",
+        "description": "Removes the Review resource.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Review identifier",
+            "required": true,
+            "deprecated": false,
+            "allowEmptyValue": false,
+            "schema": {
+              "type": "string"
+            },
+            "style": "simple",
+            "explode": false,
+            "allowReserved": false
+          }
+        ],
+        "deprecated": false
+      },
+      "patch": {
+        "operationId": "api_reviews_id_patch",
+        "tags": [
+          "Review"
+        ],
+        "responses": {
+          "200": {
+            "description": "Review resource updated",
+            "content": {
+              "application/ld+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Review.jsonld"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Review"
+                }
+              },
+              "multipart/form-data": {
+                "schema": {
+                  "$ref": "#/components/schemas/Review"
+                }
+              }
+            },
+            "links": {}
+          },
+          "400": {
+            "description": "Invalid input",
+            "content": {
+              "application/ld+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error.jsonld"
+                }
+              },
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "links": {}
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/ld+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error.jsonld"
+                }
+              },
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "links": {}
+          },
+          "422": {
+            "description": "An error occurred",
+            "content": {
+              "application/ld+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConstraintViolation.jsonld-jsonld"
+                }
+              },
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConstraintViolation-json"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConstraintViolation-json"
+                }
+              }
+            },
+            "links": {}
+          }
+        },
+        "summary": "Updates the Review resource.",
+        "description": "Updates the Review resource.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Review identifier",
+            "required": true,
+            "deprecated": false,
+            "allowEmptyValue": false,
+            "schema": {
+              "type": "string"
+            },
+            "style": "simple",
+            "explode": false,
+            "allowReserved": false
+          }
+        ],
+        "requestBody": {
+          "description": "The updated Review resource",
+          "content": {
+            "application/merge-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Review"
+              }
+            }
+          },
+          "required": true
+        },
+        "deprecated": false
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Book": {
+        "type": "object",
+        "description": "A book.",
+        "deprecated": false,
+        "properties": {
+          "id": {
+            "readOnly": true,
+            "description": "The ID of this book.",
+            "type": "integer"
+          },
+          "isbn": {
+            "description": "The ISBN of this book (or null  doesn't have one).",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "title": {
+            "description": "The title of this book.",
+            "type": "string"
+          },
+          "description": {
+            "description": "The description of this book.",
+            "type": "string"
+          },
+          "author": {
+            "description": "The author of this book.",
+            "type": "string"
+          },
+          "publicationDate": {
+            "description": "The publication date of this book.",
+            "type": "string",
+            "format": "date-time"
+          },
+          "reviews": {
+            "description": "Available reviews for this book.",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "iri-reference",
+              "example": "https://example.com/"
+            }
+          }
+        }
+      },
+      "Book.jsonld": {
+        "type": "object",
+        "description": "A book.",
+        "deprecated": false,
+        "properties": {
+          "@context": {
+            "readOnly": true,
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "@vocab": {
+                    "type": "string"
+                  },
+                  "hydra": {
+                    "type": "string",
+                    "enum": [
+                      "http://www.w3.org/ns/hydra/core#"
+                    ]
+                  }
+                },
+                "required": [
+                  "@vocab",
+                  "hydra"
+                ],
+                "additionalProperties": true
+              }
+            ]
+          },
+          "@id": {
+            "readOnly": true,
+            "type": "string"
+          },
+          "@type": {
+            "readOnly": true,
+            "type": "string"
+          },
+          "id": {
+            "readOnly": true,
+            "description": "The ID of this book.",
+            "type": "integer"
+          },
+          "isbn": {
+            "description": "The ISBN of this book (or null  doesn't have one).",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "title": {
+            "description": "The title of this book.",
+            "type": "string"
+          },
+          "description": {
+            "description": "The description of this book.",
+            "type": "string"
+          },
+          "author": {
+            "description": "The author of this book.",
+            "type": "string"
+          },
+          "publicationDate": {
+            "description": "The publication date of this book.",
+            "type": "string",
+            "format": "date-time"
+          },
+          "reviews": {
+            "description": "Available reviews for this book.",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "iri-reference",
+              "example": "https://example.com/"
+            }
+          }
+        }
+      },
+      "ConstraintViolation-json": {
+        "type": "object",
+        "description": "Unprocessable entity",
+        "deprecated": false,
+        "properties": {
+          "status": {
+            "default": 422,
+            "example": 422,
+            "type": "integer"
+          },
+          "violations": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "propertyPath": {
+                  "type": "string",
+                  "description": "The property path of the violation"
+                },
+                "message": {
+                  "type": "string",
+                  "description": "The message associated with the violation"
+                }
+              }
+            }
+          },
+          "detail": {
+            "readOnly": true,
+            "type": "string"
+          },
+          "type": {
+            "readOnly": true,
+            "type": "string"
+          },
+          "title": {
+            "readOnly": true,
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "instance": {
+            "readOnly": true,
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      },
+      "ConstraintViolation.jsonld-jsonld": {
+        "type": "object",
+        "description": "Unprocessable entity",
+        "deprecated": false,
+        "properties": {
+          "@context": {
+            "readOnly": true,
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "@vocab": {
+                    "type": "string"
+                  },
+                  "hydra": {
+                    "type": "string",
+                    "enum": [
+                      "http://www.w3.org/ns/hydra/core#"
+                    ]
+                  }
+                },
+                "required": [
+                  "@vocab",
+                  "hydra"
+                ],
+                "additionalProperties": true
+              }
+            ]
+          },
+          "@id": {
+            "readOnly": true,
+            "type": "string"
+          },
+          "@type": {
+            "readOnly": true,
+            "type": "string"
+          },
+          "status": {
+            "default": 422,
+            "example": 422,
+            "type": "integer"
+          },
+          "violations": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "propertyPath": {
+                  "type": "string",
+                  "description": "The property path of the violation"
+                },
+                "message": {
+                  "type": "string",
+                  "description": "The message associated with the violation"
+                }
+              }
+            }
+          },
+          "detail": {
+            "readOnly": true,
+            "type": "string"
+          },
+          "description": {
+            "readOnly": true,
+            "type": "string"
+          },
+          "type": {
+            "readOnly": true,
+            "type": "string"
+          },
+          "title": {
+            "readOnly": true,
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "instance": {
+            "readOnly": true,
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      },
+      "Error": {
+        "type": "object",
+        "description": "A representation of common errors.",
+        "deprecated": false,
+        "properties": {
+          "title": {
+            "readOnly": true,
+            "description": "A short, human-readable summary of the problem.",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "detail": {
+            "readOnly": true,
+            "description": "A human-readable explanation specific to this occurrence of the problem.",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "status": {
+            "type": "number",
+            "example": 404,
+            "default": 400
+          },
+          "instance": {
+            "readOnly": true,
+            "description": "A URI reference that identifies the specific occurrence of the problem. It may or may not yield further information if dereferenced.",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "type": {
+            "readOnly": true,
+            "description": "A URI reference that identifies the problem type",
+            "type": "string"
+          }
+        }
+      },
+      "Error.jsonld": {
+        "type": "object",
+        "description": "A representation of common errors.",
+        "deprecated": false,
+        "properties": {
+          "@context": {
+            "readOnly": true,
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "@vocab": {
+                    "type": "string"
+                  },
+                  "hydra": {
+                    "type": "string",
+                    "enum": [
+                      "http://www.w3.org/ns/hydra/core#"
+                    ]
+                  }
+                },
+                "required": [
+                  "@vocab",
+                  "hydra"
+                ],
+                "additionalProperties": true
+              }
+            ]
+          },
+          "@id": {
+            "readOnly": true,
+            "type": "string"
+          },
+          "@type": {
+            "readOnly": true,
+            "type": "string"
+          },
+          "title": {
+            "readOnly": true,
+            "description": "A short, human-readable summary of the problem.",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "detail": {
+            "readOnly": true,
+            "description": "A human-readable explanation specific to this occurrence of the problem.",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "status": {
+            "type": "number",
+            "example": 404,
+            "default": 400
+          },
+          "instance": {
+            "readOnly": true,
+            "description": "A URI reference that identifies the specific occurrence of the problem. It may or may not yield further information if dereferenced.",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "type": {
+            "readOnly": true,
+            "description": "A URI reference that identifies the problem type",
+            "type": "string"
+          },
+          "description": {
+            "readOnly": true,
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      },
+      "MediaObject.jsonld-media_object.read": {
+        "type": "object",
+        "description": "",
+        "deprecated": false,
+        "externalDocs": {
+          "url": "https://schema.org/MediaObject"
+        },
+        "properties": {
+          "@context": {
+            "readOnly": true,
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "@vocab": {
+                    "type": "string"
+                  },
+                  "hydra": {
+                    "type": "string",
+                    "enum": [
+                      "http://www.w3.org/ns/hydra/core#"
+                    ]
+                  }
+                },
+                "required": [
+                  "@vocab",
+                  "hydra"
+                ],
+                "additionalProperties": true
+              }
+            ]
+          },
+          "@id": {
+            "readOnly": true,
+            "type": "string"
+          },
+          "@type": {
+            "readOnly": true,
+            "type": "string"
+          },
+          "contentUrl": {
+            "readOnly": true,
+            "externalDocs": {
+              "url": "https://schema.org/contentUrl"
+            },
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      },
+      "Review": {
+        "type": "object",
+        "description": "A review of a book.",
+        "deprecated": false,
+        "properties": {
+          "id": {
+            "readOnly": true,
+            "description": "The ID of this review.",
+            "type": "integer"
+          },
+          "rating": {
+            "description": "The rating of this review (between 0 and 5).",
+            "type": "integer"
+          },
+          "body": {
+            "description": "The body of the review.",
+            "type": "string"
+          },
+          "author": {
+            "description": "The author of the review.",
+            "type": "string"
+          },
+          "publicationDate": {
+            "description": "The date of publication of this review.",
+            "type": "string",
+            "format": "date-time"
+          },
+          "book": {
+            "description": "The book this review is about.",
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "iri-reference",
+            "example": "https://example.com/"
+          }
+        }
+      },
+      "Review.jsonld": {
+        "type": "object",
+        "description": "A review of a book.",
+        "deprecated": false,
+        "properties": {
+          "@context": {
+            "readOnly": true,
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "@vocab": {
+                    "type": "string"
+                  },
+                  "hydra": {
+                    "type": "string",
+                    "enum": [
+                      "http://www.w3.org/ns/hydra/core#"
+                    ]
+                  }
+                },
+                "required": [
+                  "@vocab",
+                  "hydra"
+                ],
+                "additionalProperties": true
+              }
+            ]
+          },
+          "@id": {
+            "readOnly": true,
+            "type": "string"
+          },
+          "@type": {
+            "readOnly": true,
+            "type": "string"
+          },
+          "id": {
+            "readOnly": true,
+            "description": "The ID of this review.",
+            "type": "integer"
+          },
+          "rating": {
+            "description": "The rating of this review (between 0 and 5).",
+            "type": "integer"
+          },
+          "body": {
+            "description": "The body of the review.",
+            "type": "string"
+          },
+          "author": {
+            "description": "The author of the review.",
+            "type": "string"
+          },
+          "publicationDate": {
+            "description": "The date of publication of this review.",
+            "type": "string",
+            "format": "date-time"
+          },
+          "book": {
+            "description": "The book this review is about.",
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "iri-reference",
+            "example": "https://example.com/"
+          }
+        }
+      }
+    },
+    "responses": {},
+    "parameters": {},
+    "examples": {},
+    "requestBodies": {},
+    "headers": {},
+    "securitySchemes": {}
+  },
+  "security": [],
+  "tags": [
+    {
+      "name": "Book",
+      "description": "A book."
+    },
+    {
+      "name": "MediaObject"
+    },
+    {
+      "name": "Review",
+      "description": "A review of a book."
+    }
+  ],
+  "webhooks": {}
+}
