@@ -63,10 +63,14 @@ class MediaObject
     #[Assert\NotNull]
     public ?File $file = null;
 
+
+    /**
+     * The filepath of media
+     */
     #[ApiProperty(writable: false)]
     #[ORM\Column(nullable: true)]
     #[Groups(['media_object:read'])]
-    public ?string $filePath = null;
+    private ?string $filePath = null;
 
     public function getId(): ?int
     {

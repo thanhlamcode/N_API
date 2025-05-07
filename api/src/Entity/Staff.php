@@ -35,9 +35,9 @@ use Symfony\Component\Serializer\Annotation\Groups;
     'activeStatus',
     'bookingStatus'
 ])]
-#[ApiFilter(OrderFilter::class, properties: [
-    'createdAt' => 'DESC'
-], arguments: ['orderParameterName' => 'order'])]
+#[ApiFilter(OrderFilter::class,
+    properties: ['createdAt' => 'DESC'],
+    arguments: ['orderParameterName' => 'order'])]
 #[ORM\Entity]
 class Staff
 {
