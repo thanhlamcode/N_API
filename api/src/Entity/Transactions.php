@@ -4,12 +4,19 @@ namespace App\Entity;
 
 use AllowDynamicProperties;
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Post;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Attribute\Groups;
 
 #[AllowDynamicProperties]
 #[ApiResource(
-    normalizationContext: ['groups' => ['user:read']],
+    operations: [
+        new Post(security:  "is_granted('IS_AUTHENTICATED_FULLY')"),
+        new Get(security:  "is_granted('ROLE_USER') and object == user"),
+        new GetCollection(security:  "is_granted('ROLE_ADMIN')"),
+    ]
 )]
 #[ORM\Entity]
 class Transactions
@@ -17,7 +24,6 @@ class Transactions
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    #[Groups(['user:read'])]
     private int $id;
 
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'transactions')]
@@ -32,6 +38,10 @@ class Transactions
     #[ORM\Column(type: 'string', length: 255)]
     #[Groups(['user:read'])]
     private string $description;
+
+    #[ORM\Column(type: 'datetime_immutable')]
+    private \DateTimeImmutable $createdAt;
+
 
     public function getId(): int
     {
@@ -82,33 +92,5 @@ class Transactions
     {
         $this->createdAt = $createdAt;
     }
-
-    public function getTransactions(): array
-    {
-        return $this->transactions;
-    }
-
-    public function addTransaction(Transactions $transaction): self
-    {
-        if (!$this->transactions->contains($transaction)) {
-            $this->transactions[] = $transaction;
-            $transaction->setUser($this);
-        }
-
-        return $this;
-    }
-
-    public function removeTransaction(Transactions $transaction): self
-    {
-        if ($this->transactions->removeElement($transaction)) {
-            // set the owning side to null (unless already changed)
-            if ($transaction->getUser() === $this) {
-                $transaction->setUser(null);
-            }
-        }
-
-        return $this;
-    }
-
 
 }
