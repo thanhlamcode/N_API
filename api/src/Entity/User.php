@@ -3,13 +3,19 @@
 // src/Entity/User.php
 namespace App\Entity;
 
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use App\Controller\RegisterController;
 use App\DTO\ResetPasswordRequest;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Metadata\ApiResource;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\Serializer\Attribute\Groups;
+use Symfony\Component\Serializer\Attribute\MaxDepth;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity]
@@ -26,8 +32,11 @@ use Symfony\Component\Validator\Constraints as Assert;
             input: ResetPasswordRequest::class,
             output: false,
             messenger: 'input'
-        )
-    ]
+        ),
+        new GetCollection(),
+        new Get()
+    ],
+    normalizationContext: ['groups' => ['user:read']]
 )]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
@@ -38,17 +47,29 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(type: 'string', length: 255, unique: true)]
     #[Assert\NotBlank]
+    #[Groups(['user:read'])]
     private string $username;
 
     #[ORM\Column(type: 'string')]
     private string $password;
 
     #[ORM\Column(type: 'json')]
+    #[Groups(['user:read'])]
     private array $roles = ['ROLE_USER'];
+
+    #[ORM\OneToMany(targetEntity: Transactions::class, mappedBy: 'user')]
+    #[Groups(['user:read'])]
+    #[MaxDepth(1)]
+    private Collection $transactions;
 
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getTransactions(): Collection
+    {
+        return $this->transactions;
     }
 
     public function getUsername(): string
@@ -92,5 +113,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getUserIdentifier(): string
     {
         return $this->username;
+    }
+
+    public function __construct()
+    {
+        $this->transactions = new ArrayCollection();
     }
 }

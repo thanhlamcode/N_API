@@ -8,13 +8,6 @@
       <jdbc-url>jdbc:postgresql://localhost:5432/product</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
-    <data-source source="LOCAL" name="product@localhost [2]" uuid="b9a5fc44-cd9a-4304-8ec6-0131476201a1">
-      <driver-ref>postgresql</driver-ref>
-      <synchronize>true</synchronize>
-      <jdbc-driver>org.postgresql.Driver</jdbc-driver>
-      <jdbc-url>jdbc:postgresql://localhost:5432/product</jdbc-url>
-      <working-dir>$ProjectFileDir$</working-dir>
-    </data-source>
     <data-source source="LOCAL" name="product_test_test@localhost" uuid="177ffb76-5e03-49bd-b737-73534e21e459">
       <driver-ref>postgresql</driver-ref>
       <synchronize>true</synchronize>
