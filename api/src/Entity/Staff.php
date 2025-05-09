@@ -2,189 +2,159 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Doctrine\Orm\Filter\BooleanFilter;
-use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
-use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
-use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
-use ApiPlatform\Metadata\Get;
-use ApiPlatform\Metadata\GetCollection;
-use ApiPlatform\Metadata\Post;
-use ApiPlatform\Metadata\Put;
-use ApiPlatform\Metadata\Delete;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
-#[ApiResource(
-    operations: [
-        new GetCollection(),
-        new Get(),
-        new Post(),
-        new Put(),
-        new Delete()
-    ],
-    normalizationContext: ['groups' => ['staff:read']],
-    denormalizationContext: ['groups' => ['staff:write']]
-)]
-#[ApiFilter(SearchFilter::class, properties: [
-    'name' => 'partial',
-    'nickname' => 'partial',
-    'code' => 'exact',
-])]
-#[ApiFilter(BooleanFilter::class, properties: [
-    'activeStatus',
-    'bookingStatus'
-])]
-#[ApiFilter(OrderFilter::class,
-    properties: ['createdAt' => 'DESC'],
-    arguments: ['orderParameterName' => 'order'])]
+#[ApiResource]
 #[ORM\Entity]
 class Staff
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column]
-    #[Groups(['staff:read'])]
-    private ?int $id = null;
+    #[ORM\Column(type: 'integer')]
+    private int $id;
 
-    #[ORM\Column(length: 255)]
-    #[Groups(['staff:read', 'staff:write'])]
+    #[ORM\Column(type: 'string', length: 255)]
     private string $name;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['staff:read', 'staff:write'])]
-    private ?string $avatar = null;
-
-    #[ORM\Column(length: 255)]
-    #[Groups(['staff:read', 'staff:write'])]
-    private string $nickname;
-
-    #[ORM\Column(length: 50, unique: true)]
-    #[Groups(['staff:read', 'staff:write'])]
+    #[ORM\Column(type: 'string', length: 3)]
     private string $code;
 
+    #[ORM\Column(type: 'string', length: 255)]
+    private string $nickname;
+
+    #[ORM\Column(type: 'string', length: 20)]
+    #[Assert\NotBlank(message: 'Cellphone cannot be blank.')]
+    #[Assert\Regex(
+        pattern: '/^\+?[0-9]{9,15}$/',
+        message: 'Please enter a valid cellphone number.'
+    )]
+    private string $cellphone;
+
+    #[ORM\Column(type: 'string', length: 255)]
+    #[Assert\NotBlank(message: 'Email cannot be blank.')]
+    #[Assert\Email(message: 'Please enter a valid email address.')]
+    private string $email;
+
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    private ?string $address = null;
+
+    #[ORM\Column(type: 'string', length: 50, nullable: true)]
+    private ?string $color = null;
+
+    #[ORM\OneToMany(targetEntity: StaffPermissionLink::class, mappedBy: 'staff', cascade: ['persist', 'remove'])]
+    private Collection $staffPermissionLinks;
+
     #[ORM\Column(type: 'boolean')]
-    #[Groups(['staff:read', 'staff:write'])]
+    private bool $bookingStaff = false;
+
+    #[ORM\Column(type: 'boolean')]
     private bool $activeStatus = true;
 
-    #[ORM\Column(type: 'boolean')]
-    #[Groups(['staff:read', 'staff:write'])]
-    private bool $bookingStatus = true;
-
-    #[ORM\Column(type: 'decimal', precision: 10, scale: 2, nullable: true)]
-    #[Groups(['staff:read', 'staff:write'])]
-    private ?float $commissionOrSalary = null;
-
-    #[ORM\Column(type: 'datetime_immutable')]
-    #[Groups(['staff:read'])]
-    private \DateTimeImmutable $createdAt;
-
-    public function __construct()
-    {
-        $this->createdAt = new \DateTimeImmutable();
-    }
-
-    // Getter và Setter (có thể dùng make:entity để generate tự động)
-    // ...
-
-    public function getId(): ?int
+    public function getId(): int
     {
         return $this->id;
     }
 
-    public function getName(): ?string
+    public function getName(): string
     {
         return $this->name;
     }
 
-    public function setName(string $name): static
+    public function setName(string $name): void
     {
         $this->name = $name;
-
-        return $this;
     }
 
-    public function getAvatar(): ?string
-    {
-        return $this->avatar;
-    }
-
-    public function setAvatar(?string $avatar): static
-    {
-        $this->avatar = $avatar;
-
-        return $this;
-    }
-
-    public function getNickname(): ?string
-    {
-        return $this->nickname;
-    }
-
-    public function setNickname(string $nickname): static
-    {
-        $this->nickname = $nickname;
-
-        return $this;
-    }
-
-    public function getCode(): ?string
+    public function getCode(): string
     {
         return $this->code;
     }
 
-    public function setCode(string $code): static
+    public function setCode(string $code): void
     {
         $this->code = $code;
-
-        return $this;
     }
 
-    public function isActiveStatus(): ?bool
+    public function getNickname(): string
+    {
+        return $this->nickname;
+    }
+
+    public function setNickname(string $nickname): void
+    {
+        $this->nickname = $nickname;
+    }
+
+    public function getCellphone(): string
+    {
+        return $this->cellphone;
+    }
+
+    public function setCellphone(string $cellphone): void
+    {
+        $this->cellphone = $cellphone;
+    }
+
+    public function getEmail(): string
+    {
+        return $this->email;
+    }
+
+    public function setEmail(string $email): void
+    {
+        $this->email = $email;
+    }
+
+    public function getAddress(): ?string
+    {
+        return $this->address;
+    }
+
+    public function setAddress(?string $address): void
+    {
+        $this->address = $address;
+    }
+
+    public function getColor(): ?string
+    {
+        return $this->color;
+    }
+
+    public function setColor(?string $color): void
+    {
+        $this->color = $color;
+    }
+
+    public function getStaffPermissionLinks(): Collection
+    {
+        return $this->staffPermissionLinks;
+    }
+
+    public function setStaffPermissionLinks(Collection $staffPermissionLinks): void
+    {
+        $this->staffPermissionLinks = $staffPermissionLinks;
+    }
+
+    public function isBookingStaff(): bool
+    {
+        return $this->bookingStaff;
+    }
+
+    public function setBookingStaff(bool $bookingStaff): void
+    {
+        $this->bookingStaff = $bookingStaff;
+    }
+
+    public function isActiveStatus(): bool
     {
         return $this->activeStatus;
     }
 
-    public function setActiveStatus(bool $activeStatus): static
+    public function setActiveStatus(bool $activeStatus): void
     {
         $this->activeStatus = $activeStatus;
-
-        return $this;
-    }
-
-    public function isBookingStatus(): ?bool
-    {
-        return $this->bookingStatus;
-    }
-
-    public function setBookingStatus(bool $bookingStatus): static
-    {
-        $this->bookingStatus = $bookingStatus;
-
-        return $this;
-    }
-
-    public function getCommissionOrSalary(): ?string
-    {
-        return $this->commissionOrSalary;
-    }
-
-    public function setCommissionOrSalary(?string $commissionOrSalary): static
-    {
-        $this->commissionOrSalary = $commissionOrSalary;
-
-        return $this;
-    }
-
-    public function getCreatedAt(): ?\DateTimeImmutable
-    {
-        return $this->createdAt;
-    }
-
-    public function setCreatedAt(\DateTimeImmutable $createdAt): static
-    {
-        $this->createdAt = $createdAt;
-
-        return $this;
     }
 }
