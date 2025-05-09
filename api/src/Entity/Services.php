@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\JoinColumn;
 
 #[ApiResource]
 #[ORM\Entity]
@@ -32,7 +33,7 @@ class Services
     #[ORM\Column(type: 'integer', nullable: true)]
     private int $supplyShare;
 
-    #[ORM\OneToOne(targetEntity: Categories::class)]
+    #[ORM\ManyToOne(targetEntity: Categories::class)]
     #[ORM\JoinColumn(name: 'categories_id', referencedColumnName: 'id', nullable: false)]
     private Categories $categories;
 
@@ -46,6 +47,7 @@ class Services
     private bool $showOnPOS = true;
 
     #[ORM\OneToOne(targetEntity: MediaObject::class)]
+    #[JoinColumn(name: 'media_id', referencedColumnName: 'id', nullable: false)]
     private MediaObject $mediaObject;
 
     public function getId(): int
@@ -151,5 +153,15 @@ class Services
     public function setShowOnPOS(bool $showOnPOS): void
     {
         $this->showOnPOS = $showOnPOS;
+    }
+
+    public function getMediaObject(): MediaObject
+    {
+        return $this->mediaObject;
+    }
+
+    public function setMediaObject(MediaObject $mediaObject): void
+    {
+        $this->mediaObject = $mediaObject;
     }
 }

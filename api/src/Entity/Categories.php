@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use Doctrine\Common\Collections\Collection;
 use Symfony\Component\Uid\Uuid;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -22,6 +23,10 @@ class Categories
 
     #[ORM\Column(type: 'boolean', nullable: false)]
     private bool $status;
+
+    #[ORM\OneToMany(targetEntity: Services::class, mappedBy: 'categories')]
+    private Collection $services;
+
 
     public function getId(): ?Uuid
     {
