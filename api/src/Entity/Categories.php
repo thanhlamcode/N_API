@@ -11,9 +11,10 @@ use Doctrine\ORM\Mapping as ORM;
 class Categories
 {
     #[ORM\Id]
-    #[ORM\GeneratedValue]
+    #[ORM\GeneratedValue(strategy: 'CUSTOM')]
+    #[ORM\CustomIdGenerator(class: 'doctrine.uuid_generator')]
     #[ORM\Column(type: 'uuid')]
-    private ?Uuid $id;
+    private ?Uuid $id = null;
 
     #[ORM\OneToOne(targetEntity: Colors::class)]
     #[ORM\JoinColumn(name: 'color', referencedColumnName: 'id', nullable: false)]
@@ -21,4 +22,34 @@ class Categories
 
     #[ORM\Column(type: 'boolean', nullable: false)]
     private bool $status;
+
+    public function getId(): ?Uuid
+    {
+        return $this->id;
+    }
+
+    public function setId(?Uuid $id): void
+    {
+        $this->id = $id;
+    }
+
+    public function getColors(): Colors
+    {
+        return $this->colors;
+    }
+
+    public function setColors(Colors $colors): void
+    {
+        $this->colors = $colors;
+    }
+
+    public function isStatus(): bool
+    {
+        return $this->status;
+    }
+
+    public function setStatus(bool $status): void
+    {
+        $this->status = $status;
+    }
 }

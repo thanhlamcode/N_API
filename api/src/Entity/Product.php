@@ -57,11 +57,6 @@ class Product
     #[ORM\Column(type: 'integer')]
     public int $stockQuantity = 0;
 
-    /** The category the product belongs to. */
-    #[ORM\ManyToOne(targetEntity: Category::class, inversedBy: 'products')]
-    #[ORM\JoinColumn(nullable: false)]
-    public Category $category;
-
     /** The creation date of the product. */
     #[ORM\Column(type: 'datetime_immutable')]
     public \DateTimeImmutable $createdAt;
@@ -140,17 +135,6 @@ class Product
     public function setStockQuantity(int $stockQuantity): self
     {
         $this->stockQuantity = $stockQuantity;
-        return $this;
-    }
-
-    public function getCategory(): Category
-    {
-        return $this->category;
-    }
-
-    public function setCategory(Category $category): self
-    {
-        $this->category = $category;
         return $this;
     }
 
