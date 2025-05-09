@@ -33,7 +33,7 @@ class Transactions
 
     #[ORM\Column(type: 'float')]
     #[Groups(['user:read'])]
-    private int $amount;
+    private float $amount;
 
     #[ORM\Column(type: 'string', length: 255)]
     #[Groups(['user:read'])]

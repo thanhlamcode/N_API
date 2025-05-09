@@ -50,7 +50,7 @@ class Product
     public string $description = '';
 
     /** The price of the product. */
-    #[ORM\Column(type: 'decimal', precision: 10, scale: 2)]
+    #[ORM\Column(type: 'float', precision: 10, scale: 2)]
     public float $price = 0.0;
 
     /** The stock quantity of the product. */
