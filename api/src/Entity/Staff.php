@@ -3,11 +3,28 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Put;
+use App\State\StaffProcessor;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
-#[ApiResource]
+#[ApiResource(
+    operations: [
+        new GetCollection(),
+        new Get(),
+        new Post(
+            processor: StaffProcessor::class
+        ),
+        new Put(),
+        new Delete(),
+    ]
+)]
 #[ORM\Entity]
 class Staff
 {
@@ -44,7 +61,7 @@ class Staff
     #[ORM\Column(type: 'string', length: 50, nullable: true)]
     private ?string $color = null;
 
-    #[ORM\OneToMany(targetEntity: StaffPermissionLink::class, mappedBy: 'staff', cascade: ['persist', 'remove'])]
+    #[ORM\OneToMany(targetEntity: StaffPermissionLink::class, mappedBy: 'staff', cascade: ['persist', 'remove'], orphanRemoval: true)]
     private Collection $staffPermissionLinks;
 
     #[ORM\Column(type: 'boolean')]
@@ -137,9 +154,12 @@ class Staff
         return $this->staffPermissionLinks;
     }
 
-    public function setStaffPermissionLinks(Collection $staffPermissionLinks): void
+    public function setStaffPermissionLinks(iterable $staffPermissionLinks): void
     {
-        $this->staffPermissionLinks = $staffPermissionLinks;
+        $this->staffPermissionLinks = new ArrayCollection();
+        foreach ($staffPermissionLinks as $link) {
+            $this->staffPermissionLinks->add($link);
+        }
     }
 
     public function isBookingStaff(): bool

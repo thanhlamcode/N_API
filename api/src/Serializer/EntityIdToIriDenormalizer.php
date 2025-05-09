@@ -59,6 +59,9 @@ final class EntityIdToIriDenormalizer implements DenormalizerInterface
             }
         }
 
+        if (!isset($context['resource_class'])) {
+            $context['resource_class'] = $type;
+        }
         return $this->normalizer->denormalize($data, $type, $format, $context);
     }
 
