@@ -53,6 +53,10 @@ class Staff
     #[ORM\Column(type: 'boolean')]
     private bool $activeStatus = true;
 
+    #[ORM\OneToOne(targetEntity: MediaObject::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
+    #[ORM\JoinColumn(name: 'media_object_id', referencedColumnName: 'id', nullable: true, onDelete: 'CASCADE')]
+    private ?MediaObject $avatar = null;
+
     public function getId(): int
     {
         return $this->id;
