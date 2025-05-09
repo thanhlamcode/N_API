@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\JoinColumn;
 
@@ -33,7 +34,7 @@ class Services
     #[ORM\Column(type: 'integer', nullable: true)]
     private int $supplyShare;
 
-    #[ORM\ManyToOne(targetEntity: Categories::class)]
+    #[ORM\ManyToOne(targetEntity: Categories::class, inversedBy: 'services')]
     #[ORM\JoinColumn(name: 'categories_id', referencedColumnName: 'id', nullable: false)]
     private Categories $categories;
 
@@ -49,6 +50,9 @@ class Services
     #[ORM\OneToOne(targetEntity: MediaObject::class)]
     #[JoinColumn(name: 'media_id', referencedColumnName: 'id', nullable: false)]
     private MediaObject $mediaObject;
+
+    #[ORM\OneToMany(targetEntity: StaffService::class, mappedBy: 'services', cascade: ['persist', 'remove'])]
+    private Collection $staffService;
 
     public function getId(): int
     {

@@ -74,6 +74,9 @@ class Staff
     #[ORM\JoinColumn(name: 'media_object_id', referencedColumnName: 'id', nullable: true, onDelete: 'CASCADE')]
     private ?MediaObject $avatar = null;
 
+    #[ORM\OneToMany(targetEntity: StaffService::class, mappedBy: 'staff', cascade: ['persist', 'remove'])]
+    private Collection $staffService;
+
     public function getId(): int
     {
         return $this->id;
